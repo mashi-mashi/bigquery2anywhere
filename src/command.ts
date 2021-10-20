@@ -12,7 +12,8 @@ export type SettingType =
       type: 'slack';
       channel?: string;
       webhookUrl: string;
-      parser(value: any): CommonTypesSlackPayload;
+      makeMessage(value: any): CommonTypesSlackPayload;
+      makeSummary?(values: any[]): CommonTypesSlackPayload;
     };
 
 export type CommandType<QUERY_RESULT extends Record<string, any>, COMPOSE_RESULT extends any[]> = {

@@ -16,7 +16,8 @@ export const spreadSheetWriter = async <T extends any[]>(composed: T, setting: S
 export const slackNotifer = async <T extends any[]>(composed: T, setting: SettingType) => {
   if (setting.type === 'slack') {
     const slack = SlackClient.getInstance(setting.webhookUrl);
-    const messages = composed.map(setting.parser);
+    const messages = composed.map(setting.makeMessage);
+    setting.makeSummary && messages.push(setting.makeSummary(composed));
     await Promise.all(messages.map(message => slack.notify({...message, channel: message.channel || setting.channel})));
   } else {
     throw new Error(`different types specified. shoud be slack but ${setting.type}`);
