@@ -1,0 +1,49 @@
+{
+  "name": "bqbq",
+  "version": "0.0.0",
+  "description": "",
+  "author": "mashi-mashi <mashi.07.st@gmail.com>",
+  "main": "lib/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "buildWatch": "tsc --watch",
+    "fixpack": "fixpack",
+    "lint": "eslint --ext .ts ./src --cache",
+    "lintfix": "eslint --ext .ts ./src --cache --fix",
+    "test": "npx jest"
+  },
+  "files": [
+    "lib"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/bigquery": "^5.8.0",
+    "@types/uuid": "^8.3.1",
+    "axios": "^0.21.4",
+    "cors": "^2.8.5",
+    "cycle": "^1.0.3",
+    "dotenv": "^10.0.0",
+    "googleapis": "^89.0.0",
+    "uuid": "^8.3.2"
+  },
+  "engines": {
+    "node": "12"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/jest": "^27.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "fixpack": "^4.0.0",
+    "husky": "^7.0.2",
+    "hygen": "^6.1.0",
+    "prettier": "^2.3.2",
+    "pretty-quick": "^3.1.1",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.4.2"
+  }
+}
