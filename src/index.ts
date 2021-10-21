@@ -2,7 +2,7 @@ import {CommandType} from './command';
 import {BigQueryClient} from './libs/bigquery-client';
 import {spreadSheetWriter} from './messanger';
 
-const executor = async <QUERY_RESULT, COMPOSE_RESULT extends any[]>(
+const singleExecutor = async <QUERY_RESULT, COMPOSE_RESULT extends any[]>(
   command: CommandType<QUERY_RESULT, COMPOSE_RESULT>
 ) => {
   const {query, setting, composer, messenger} = command;
@@ -17,7 +17,7 @@ export const multipleExecutor = async (
   commands: CommandType<any, any>[],
   selector: (command: CommandType<any, any>) => boolean
 ) => {
-  await Promise.all(commands.filter(selector).map(executor));
+  await Promise.all(commands.filter(selector).map(singleExecutor));
 };
 
 export const SpreadSheetCommand: CommandType<{id: string}, {}[]> = {
