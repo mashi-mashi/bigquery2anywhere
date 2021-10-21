@@ -5,11 +5,19 @@ import {spreadSheetWriter} from './messanger';
 const executor = async <QUERY_RESULT, COMPOSE_RESULT extends any[]>(
   command: CommandType<QUERY_RESULT, COMPOSE_RESULT>
 ) => {
+  const {query, setting, composer, messenger} = command;
   const bq = new BigQueryClient();
-  const values = await bq.executeQuery<QUERY_RESULT>(command.query);
+  const values = await bq.executeQuery<QUERY_RESULT>(query);
+  const composed = composer(values);
 
-  const composed = command.composer(values);
-  await command.messenger(composed, command.setting);
+  await messenger(composed, setting);
+};
+
+export const multipleExecutor = async (
+  commands: CommandType<any, any>[],
+  selector: (command: CommandType<any, any>) => boolean
+) => {
+  await Promise.all(commands.filter(selector).map(executor));
 };
 
 export const SpreadSheetCommand: CommandType<{id: string}, {}[]> = {
