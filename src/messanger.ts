@@ -1,10 +1,14 @@
-import {SettingType} from './command';
+import {CredentialType, SettingType} from './command';
 import {SlackClient} from './libs/slack-client';
 import {SpreadSheetClient} from './libs/spreadsheet-client';
 
-export const spreadSheetWriter = async <T extends any[]>(composed: T, setting: SettingType) => {
+export const spreadSheetWriter = async <T extends any[]>(
+  composed: T,
+  setting: SettingType,
+  credentials?: CredentialType
+) => {
   if (setting.type === 'spreadsheet') {
-    const gss = await SpreadSheetClient.getInstance();
+    const gss = await SpreadSheetClient.getInstance(credentials);
     if (setting.option === 'replace') {
       await gss.replaceSheet(setting.spreadsheetId, setting.sheetId, composed);
     }

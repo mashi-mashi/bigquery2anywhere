@@ -1,11 +1,13 @@
 import {BigQuery, InsertRowsResponse} from '@google-cloud/bigquery';
 import {chunk, deepDeleteUndefined} from '../utils/object-utils';
 import {HttpError, HttpStatusCode} from './core/error';
+import {createLogger} from './core/log';
 
 const MAXIMUM_EXECUTION_AMOUNT_YEN = 5;
 
 export class BigQueryClient {
   private readonly client: BigQuery;
+  private readonly logger = createLogger('BigQueryClient');
 
   constructor(credentials?: {projectId: string; private_key: string; client_email: string}) {
     this.client = new BigQuery(
@@ -26,14 +28,14 @@ export class BigQueryClient {
   public executeQuery = async <T>(sql: string, params?: {[param: string]: any}): Promise<T[]> => {
     const [, res] = await this.client.createQueryJob({query: sql, dryRun: true});
     const yen = this.billedAsYen(res.statistics?.totalBytesProcessed);
-    console.log('見積もり(円):', yen);
+    //this.logger.log(`見積もり(円): ${yen}`);
 
     if (!yen || yen > MAXIMUM_EXECUTION_AMOUNT_YEN) {
       throw new HttpError(HttpStatusCode.INTERNAL_SERVER_ERROR, 'query-cost-is-too-high');
     }
 
     const result = await this.client.query({query: sql, params}).catch(e => {
-      console.error('failed to execute query', e);
+      this.logger.error('failed to execute query', e);
       throw new HttpError(HttpStatusCode.INTERNAL_SERVER_ERROR, 'failed-to-execute-query');
     });
 
