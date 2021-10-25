@@ -9,16 +9,11 @@ const getUsageMemorySize = () => {
 
 export const createLogger = (prefix: string) => {
   const start = new Date().getTime() / 1000;
+  const make = (message: string) =>
+    `[${prefix}]${message} [${getElapsedSecondMessage(start)}, ${getUsageMemorySize()}]`;
+
   return {
-    log: (...args: any) =>
-      console.log(
-        `[${prefix}]${args[0]} [${getElapsedSecondMessage(start)}, ${getUsageMemorySize()}]`,
-        ...args.slice(1)
-      ),
-    error: (...args: any) =>
-      console.error(
-        `[${prefix}]${args[0]} [${getElapsedSecondMessage(start)}, ${getUsageMemorySize()}]`,
-        ...args.slice(1)
-      ),
+    log: (...args: any) => console.log(make(args[0]), ...args.slice(1)),
+    error: (...args: any) => console.error(make(args[0]), ...args.slice(1)),
   };
 };
